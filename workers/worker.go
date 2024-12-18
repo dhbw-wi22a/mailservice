@@ -1,8 +1,8 @@
 package workers
 
 import (
-	"errors"
 	"fmt"
+	"go_mailservice/utils"
 	_ "go_mailservice/utils"
 	"time"
 )
@@ -28,8 +28,9 @@ func worker(id int, emailQueue chan EmailRequest) {
 
 func sendEmailWithRetry(request EmailRequest, retries int) {
 	for i := 0; i < retries; i++ {
-		err := errors.New("simulated failure")
-		//err := utils.SendEmail(request.Recipient, request.Subject, request.Message)
+		//only for testing if notifyAdmin works :-)
+		//err := errors.New("simulated failure")
+		err := utils.SendEmail(request.Recipient, request.Subject, request.Message)
 		if err == nil {
 			fmt.Printf("Email successfully sent to: %s\n", request.Recipient)
 			return
