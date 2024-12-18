@@ -1,43 +1,33 @@
 package main
 
 import (
-	"go_mailservice/utils"
+	"github.com/gin-gonic/gin"
+	"go_mailservice/workers"
 	"net/http"
 	"os"
-
-	"github.com/gin-gonic/gin"
 )
 
-type EmailRequest struct {
-	Recipient string `json:"recipient" binding:"required"`
-	Subject   string `json:"subject" binding:"required"`
-	Message   string `json:"message" binding:"required"`
-}
-
 func main() {
+
+	emailQueue := make(chan workers.EmailRequest, 100)
+	workers.StartWorkerPool(emailQueue, 10)
 
 	router := gin.Default()
 
 	router.POST("/sendmail", func(c *gin.Context) {
-		var request EmailRequest
+		var request workers.EmailRequest
 		if err := c.ShouldBindJSON(&request); err != nil {
 			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 			return
 		}
 
-		err := utils.SendEmail(request.Recipient, request.Subject, request.Message)
-		if err != nil {
-			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
-			return
-		}
-
-		c.JSON(http.StatusOK, gin.H{"status": "success", "message": "Email sent successfully!"})
+		emailQueue <- request
+		c.JSON(http.StatusOK, gin.H{"status": "success", "message": "Email added to the queue!"})
 	})
 
 	httpPort := os.Getenv("HTTP_PORT")
-
 	if httpPort == "" {
-		httpPort = "8000" //for localhost usage
+		httpPort = "8000" // Default port for localhost usage
 	}
 
 	router.Run(":" + httpPort)

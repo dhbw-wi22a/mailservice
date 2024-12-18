@@ -1,11 +1,9 @@
 package config
 
 import (
-	"fmt"
+	"github.com/joho/godotenv"
 	"os"
 	"strconv"
-
-	"github.com/joho/godotenv"
 )
 
 type smtpConfig struct {
@@ -35,5 +33,4 @@ func init() {
 		SenderEmail: os.Getenv("SMTP_SENDER_EMAIL"),
 	}
 
-	fmt.Printf("SMTP Config: %+v\n", SMTPConfig)
 }

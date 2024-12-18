@@ -2,7 +2,6 @@ package utils
 
 import (
 	"go_mailservice/config"
-
 	"gopkg.in/gomail.v2"
 )
 
