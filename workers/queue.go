@@ -8,16 +8,16 @@ type Queue struct {
 	channel chan EmailRequest
 }
 
-func NewQueue(capacity int) *Queue {
+/*func NewQueue(capacity int) *Queue {
 	return &Queue{
 		channel: make(chan EmailRequest, capacity),
 	}
-}
+}*/
 
 func (q *Queue) Add(email EmailRequest) {
 	select {
 	case q.channel <- email: // Add email to the channel
-		fmt.Printf("Email added to queue: %s\n", email.Recipient)
+		fmt.Printf("Email added to queue: %s\n", email.Recipients)
 	default:
 		fmt.Println("Queue is full. Dropping email request.")
 	}

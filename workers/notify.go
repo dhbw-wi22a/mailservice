@@ -13,16 +13,16 @@ func notifyAdmin(failedRequest EmailRequest) {
 		return
 	}
 
-	subject := fmt.Sprintf("Failed Email Delivery: %s", failedRequest.Recipient)
+	subject := fmt.Sprintf("Failed Email Delivery: %s", failedRequest.Recipients)
 	message := fmt.Sprintf(
 		"Failed to deliver email to %s after 3 attempts.\n\nSubject: %s\nMessage: %s",
-		failedRequest.Recipient, failedRequest.Subject, failedRequest.Message,
+		failedRequest.Recipients, failedRequest.Subject, failedRequest.Message,
 	)
 
 	err := utils.SendEmail(adminEmail, subject, message)
 	if err != nil {
 		fmt.Printf("Failed to notify admin about email failure: %s\n", err)
 	} else {
-		fmt.Printf("Admin notified about email failure to: %s\n", failedRequest.Recipient)
+		fmt.Printf("Admin notified about email failure to: %s\n", failedRequest.Recipients)
 	}
 }
