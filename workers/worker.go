@@ -11,20 +11,28 @@ type EmailRequest struct {
 	Recipients json.RawMessage `json:"recipients" binding:"required"`
 	Subject    string          `json:"subject" binding:"required"`
 	Message    string          `json:"message" binding:"required"`
+	Data       interface{}     `json:"data,omitempty"` //optional for specific data
 }
 
-func StartWorkerPool(emailQueue chan EmailRequest, workerCount int) {
+func StartWorkerPool(queue *Queue, workerCount int) {
 	for i := 0; i < workerCount; i++ {
-		go worker(i, emailQueue)
+		go worker(i, queue)
 	}
 }
 
-func worker(id int, emailQueue chan EmailRequest) {
-	for request := range emailQueue {
+func worker(id int, queue *Queue) {
+	for {
+		request, ok := queue.Get()
+		if !ok {
+			time.Sleep(1 * time.Second)
+			continue
+		}
+
 		var recipients []string
 		if err := json.Unmarshal(request.Recipients, &recipients); err != nil {
 			var singleRecipient string
 			if err := json.Unmarshal(request.Recipients, &singleRecipient); err != nil {
+				fmt.Printf("[Worker %d] Invalid recipients format: %v\n", id, err)
 				continue
 			}
 			recipients = append(recipients, singleRecipient)
@@ -35,6 +43,7 @@ func worker(id int, emailQueue chan EmailRequest) {
 				Recipients: json.RawMessage(fmt.Sprintf(`"%s"`, recipient)),
 				Subject:    request.Subject,
 				Message:    request.Message,
+				Data:       request.Data,
 			}, 3)
 		}
 	}

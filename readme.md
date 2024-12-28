@@ -27,27 +27,86 @@ The service requires the following environment variables:
 
 Create a `.env` file in the project directory:
 
-SMTP_SERVER=smtp.gmail.com
-SMTP_PORT=587
-SMTP_USERNAME=your_email@gmail.com (eq Sender)
-SMTP_PASSWORD=your_app_password
-HTTP_PORT=8999
+SMTP_SERVER=smtp.gmail.com</br>
+SMTP_PORT=587</br>
+SMTP_USERNAME=your_email@gmail.com (eq Sender)</br>
+SMTP_PASSWORD=your_app_password</br>
+HTTP_PORT=8999</br>
 
-Server side enviroments (Dokploy) possible.
+*Server side envs (Dokploy, Coolify, etc..) are possible.*
+
+----
+HTML template files are located in the `templates` directory. You can modify these files to customize the email content.
 
 ---- 
 
-### Request Body
+### API Endpoints and required parameters
+All endpoints are **POST** requests. </br>
 
+`Single or multiple recipients can be added to the recipients array.`
+
+**/mailservice/registration** 
+
+```json
 {
-  "recipient": "recipient@example.com",
-  "subject": "Test Email",
-  "message": "This is a test email."
+  "recipients": [
+    {
+      "email": "john@doe.com",
+      "fname": "John",
+      "lname": "Doe"
+    },
+    {
+      "email": "jane@doe.com",
+      "fname": "Jane",
+      "lname": "Doe"
+    }
+  ]
 }
+```
+**/mailservice/orderconf**
 
+```json
+{
+  "recipients": [
+    {
+      "email": "john@doe.com",
+      "fname": "John",
+      "lname": "Doe"
+    },
+    {
+      "email": "jane@doe.com",
+      "fname": "Jane",
+      "lname": "Doe"
+    }
+  ]
+}
+```
+#### Note: Following endpoints are not implemented yet.
+**/mailservice/notifyshipment**
+
+```json
+{
+  "email": "john@doe.com",
+  "fname": "John",
+  "lname": "Doe"
+}
+```
+
+**/mailservice/sendinvoice**
+
+```json
+{
+  "email": "john@doe.com",
+  "fname": "John",
+  "lname": "Doe"
+}
+```
+----
 ### Response Body
 
+```json
 {
     "message": "Email sent successfully!",
     "status": "success"
 }
+```

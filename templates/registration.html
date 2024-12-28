@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Willkommen bei HotHardwareHub</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            color: rgb(31, 50, 56);
+            background-color: #f3f4f6;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+            border: 1px solid rgb(241, 180, 89);
+            border-radius: 10px;
+            background-color: #ffffff;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            color: rgb(51, 135, 184);
+            font-size: 2rem;
+            margin-bottom: 20px;
+        }
+        p {
+            margin-bottom: 15px;
+            font-size: 1rem;
+        }
+        .highlight {
+            color: rgb(213, 27, 21);
+            font-weight: bold;
+        }
+        .footer {
+            margin-top: 30px;
+            font-size: 0.9rem;
+            color: rgb(110, 48, 49);
+            text-align: center;
+        }
+        .button {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 10px 20px;
+            background-color: rgb(51, 135, 184);
+            color: white;
+            text-decoration: none;
+            font-size: 1rem;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+            transition: background-color 0.3s ease;
+        }
+        .button:hover {
+            background-color: rgb(74, 113, 94);
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>Willkommen bei HotHardwareHub, {{.Fname}}!</h1>
+    <p>
+        Wir freuen uns, Dich bei uns begrüßen zu dürfen! HotHardwareHub bietet hochwertige Computerhardware
+        und Zubehör für B2B-Kunden. Ab sofort hast du Zugriff auf unser umfangreiches Sortiment,
+        um Dein Geschäft optimal auszustatten.
+    </p>
+    <p>
+        Bei Fragen steht Dir unser Support-Team gerne zur Verfügung:
+        <span class="highlight">hothardwarehub@gmail.com</span>.
+    </p>
+    <p>Wir freuen uns darauf, Dir weiterzuhelfen!</p>
+    <a href="https://www.hothardwarehub.com" class="button">Zum Shop</a>
+    <p class="footer">Diese E-Mail wurde gesendet an <span class="highlight">{{.Email}}</span>.</p>
+</div>
+</body>
+</html>
