@@ -12,7 +12,8 @@ func ConfOrderHandler(c *gin.Context, emailQueue *workers.Queue) {
 	var request struct {
 		Recipients []struct {
 			Email string `json:"email" binding:"required"`
-			Name  string `json:"name" binding:"required"`
+			Fname string `json:"fname" binding:"required"`
+			Lname string `json:"lname" binding:"required"`
 		} `json:"recipients"`
 	}
 	if err := c.ShouldBindJSON(&request); err != nil {
@@ -23,7 +24,8 @@ func ConfOrderHandler(c *gin.Context, emailQueue *workers.Queue) {
 	// Loop through all recipients and render email for each
 	for _, recipient := range request.Recipients {
 		htmlBody, err := utils.RenderTemplate("templates/orderconf.html", map[string]interface{}{
-			"Name":  recipient.Name,
+			"Fname": recipient.Fname,
+			"Lname": recipient.Lname,
 			"Email": recipient.Email,
 		})
 		if err != nil {
