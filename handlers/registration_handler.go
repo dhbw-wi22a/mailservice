@@ -11,9 +11,10 @@ import (
 func RegistrationHandler(c *gin.Context, emailQueue *workers.Queue) {
 	var request struct {
 		Recipients []struct {
-			Email string `json:"email" binding:"required"`
-			Fname string `json:"fname" binding:"required"`
-			Lname string `json:"lname" binding:"required"`
+			Email            string `json:"email" binding:"required"`
+			Fname            string `json:"fname" binding:"required"`
+			Lname            string `json:"lname" binding:"required"`
+			VerificationLink string `json:"verification_link" binding:"required"`
 		} `json:"recipients"`
 	}
 	if err := c.ShouldBindJSON(&request); err != nil {
@@ -24,9 +25,10 @@ func RegistrationHandler(c *gin.Context, emailQueue *workers.Queue) {
 	// Loop through all recipients and render email for each
 	for _, recipient := range request.Recipients {
 		htmlBody, err := utils.RenderTemplate("templates/registration.html", map[string]interface{}{
-			"Fname": recipient.Fname,
-			"Lname": recipient.Lname,
-			"Email": recipient.Email,
+			"Fname":             recipient.Fname,
+			"Lname":             recipient.Lname,
+			"Email":             recipient.Email,
+			"Verification_Link": recipient.VerificationLink,
 		})
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to render email template"})
@@ -37,7 +39,7 @@ func RegistrationHandler(c *gin.Context, emailQueue *workers.Queue) {
 		recipientData, _ := json.Marshal([]string{recipient.Email})
 		emailQueue.Add(workers.EmailRequest{
 			Recipients: recipientData,
-			Subject:    "Willkommen bei HotHardwareHub!",
+			Subject:    "Willkommen bei HotHardwareHub! Bestätige deine E-Mail-Adresse",
 			Message:    htmlBody,
 		})
 	}
