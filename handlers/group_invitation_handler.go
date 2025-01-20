@@ -12,12 +12,12 @@ import (
 func GroupInvitationHandler(c *gin.Context, emailQueue *workers.Queue) {
 	var request struct {
 		Recipients []struct {
-			Email            string `json:"email" binding:"required"`
-			Fname            string `json:"fname" binding:"required"`
-			Lname            string `json:"lname" binding:"required"`
-			GroupName        string `json:"group_name" binding:"required"`
-			InvitedBy        string `json:"invited_by" binding:"required"`
-			VerificationLink string `json:"verification_link" binding:"required"`
+			Email          string `json:"email" binding:"required"`
+			Fname          string `json:"fname" binding:"required"`
+			Lname          string `json:"lname" binding:"required"`
+			GroupName      string `json:"group_name" binding:"required"`
+			InvitedBy      string `json:"invited_by" binding:"required"`
+			InvitationLink string `json:"invitation_link" binding:"required"`
 		} `json:"recipients"`
 	}
 	if err := c.ShouldBindJSON(&request); err != nil {
@@ -33,8 +33,8 @@ func GroupInvitationHandler(c *gin.Context, emailQueue *workers.Queue) {
 			"Email":     recipient.Email,
 			"GroupName": recipient.GroupName,
 			"InvitedBy": recipient.InvitedBy,
-			"Accept":    fmt.Sprintf("%s/accept/", recipient.VerificationLink),
-			"Decline":   fmt.Sprintf("%s/decline/", recipient.VerificationLink),
+			"Accept":    fmt.Sprintf("%s/accept/", recipient.InvitationLink),
+			"Decline":   fmt.Sprintf("%s/decline/", recipient.InvitationLink),
 		})
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to render email template"})
