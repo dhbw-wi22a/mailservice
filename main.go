@@ -27,6 +27,9 @@ func main() {
 		mailservice.POST("/sendinvoice", func(c *gin.Context) {
 			handlers.SendInvoiceHandler(c, emailQueue)
 		})
+		mailservice.POST("/groupinvitation", func(c *gin.Context) {
+			handlers.GroupInvitationHandler(c, emailQueue)
+		})
 	}
 
 	httpPort := os.Getenv("HTTP_PORT")
