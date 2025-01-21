@@ -30,6 +30,9 @@ func main() {
 		mailservice.POST("/groupinvitation", func(c *gin.Context) {
 			handlers.GroupInvitationHandler(c, emailQueue)
 		})
+		mailservice.POST("/resetpassword", func(c *gin.Context) {
+			handlers.ResetPasswordHandler(c, emailQueue)
+		})
 	}
 
 	httpPort := os.Getenv("HTTP_PORT")
