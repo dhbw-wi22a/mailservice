@@ -33,6 +33,10 @@ func main() {
 		mailservice.POST("/resetpassword", func(c *gin.Context) {
 			handlers.ResetPasswordHandler(c, emailQueue)
 		})
+		mailservice.POST("/setinactive", func(c *gin.Context) {
+			handlers.SetInactiveHandler(c, emailQueue)
+		})
+
 	}
 
 	httpPort := os.Getenv("HTTP_PORT")
